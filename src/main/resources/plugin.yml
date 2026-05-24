@@ -1,0 +1,9 @@
+name: EnderChest
+version: '${project.version}'
+main: me.itzloghotxd.enderchest.EnderChestPlugin
+api-version: '1.16'
+prefix: EnderChest
+load: STARTUP
+author: ItzLoghotXD
+description: A simple ender chest plugin. Same as Hypixel Skyblock
+website: https://modrinth.com/project/enderchestig
