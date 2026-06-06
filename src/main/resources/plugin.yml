@@ -6,4 +6,15 @@ prefix: EnderChest
 load: STARTUP
 author: ItzLoghotXD
 description: A simple ender chest plugin. Same as Hypixel Skyblock
-website: https://modrinth.com/project/enderchestig
+website: '${project.url}'
+
+commands:
+  storage:
+    description: Open the storage menu
+    usage: /storage
+    aliases: [ec, strg]
+
+permissions:
+  storage.use:
+    description: Allows players to use the storage command
+    default: true

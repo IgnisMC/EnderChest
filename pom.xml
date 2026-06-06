@@ -17,7 +17,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <pdk.version>0.3.0</pdk.version>
     </properties>
+
     <url>https://modrinth.com/project/enderchestig</url>
+
+    <developers>
+        <developer>
+            <id>ItzLoghotXD</id>
+            <name>Loghot</name>
+            <email>itzloghotxd@gmail.com</email>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
