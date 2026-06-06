@@ -52,7 +52,7 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.bstats:bstats-bukkit</include>
+                                    <include>org.bstats</include>
                                     <include>me.itzloghotxd.pdk</include>
                                 </includes>
                             </artifactSet>
@@ -63,14 +63,6 @@
                                     <shadedPattern>${project.groupId}.${project.artifactId}.libs.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <filters>
-                                <filter>
-                                    <artifact>org.bstats</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
                         </configuration>
                     </execution>
                 </executions>
