@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,10 +36,13 @@ public class StorageGUI extends AbstractInventory {
     }
 
     @Override
-    public void handleInventory(InventoryClickEvent event) {
+    public void handleClick(InventoryClickEvent event) {
         event.setCancelled(true);
 
-        if (event.getCurrentItem().getType() == Material.BARRIER) {
+        ItemStack item = event.getCurrentItem();
+        if (item == null) return;
+
+        if (item.getType() == Material.BARRIER) {
             event.getWhoClicked().closeInventory();
         }
     }
@@ -63,5 +67,11 @@ public class StorageGUI extends AbstractInventory {
     public void onOpen(InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
         player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 1.0F);
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent event) {
+        Player player = (Player) event.getPlayer();
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, 1.0F, 1.0F);
     }
 }
