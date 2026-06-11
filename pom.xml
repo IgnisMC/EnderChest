@@ -6,7 +6,7 @@
 
     <groupId>me.itzloghotxd</groupId>
     <artifactId>enderchest</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-a</version>
     <packaging>jar</packaging>
 
     <name>EnderChest</name>
