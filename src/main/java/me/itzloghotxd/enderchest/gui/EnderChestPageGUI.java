@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2026 ItzLoghotXD
+ *
+ * This file is part of "EnderChest" Plugin.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation, version 3 of the License.
+ */
+
 package me.itzloghotxd.enderchest.gui;
 
 import me.itzloghotxd.enderchest.EnderChestPlugin;
@@ -15,11 +25,13 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.UUID;
+
 public class EnderChestPageGUI extends AbstractInventory {
-    private final Player player;
+    private final UUID uuid;
 
     public EnderChestPageGUI(Player player) {
-        this.player = player;
+        this.uuid = player.getUniqueId();
     }
     @Override
     public Component getTitle() {
@@ -39,9 +51,7 @@ public class EnderChestPageGUI extends AbstractInventory {
         if (item == null) return;
 
         switch (item.getType()) {
-            case ARROW -> {
-                new StorageGUI().open((Player) event.getWhoClicked());
-            }
+            case ARROW -> new StorageGUI().open((Player) event.getWhoClicked());
             case BARRIER -> event.getWhoClicked().closeInventory();
         }
     }
@@ -68,7 +78,7 @@ public class EnderChestPageGUI extends AbstractInventory {
             if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) inventory.setItem(i, filler);
         }
 
-        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(player.getUniqueId());
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(uuid);
         ItemStack[] contents = storage.getItems();
         for (int i = 0; i < contents.length; i++) {
             inventory.setItem(i + 9, contents[i]);
@@ -83,9 +93,10 @@ public class EnderChestPageGUI extends AbstractInventory {
 
     @Override
     public void onClose(InventoryCloseEvent event) {
-        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(player.getUniqueId());
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(uuid);
         for (int i = 0; i < 45; i++) {
             storage.getItems()[i] = inventory.getItem(i + 9);
         }
+        EnderChestPlugin.getPlugin().getStorageManager().saveStorage(uuid);
     }
 }

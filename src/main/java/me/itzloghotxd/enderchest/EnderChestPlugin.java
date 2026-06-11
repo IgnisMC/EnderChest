@@ -19,8 +19,11 @@ import me.itzloghotxd.pdk.gui.inventory.InventoryListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.UUID;
 
 public final class EnderChestPlugin extends JavaPlugin {
     private static EnderChestPlugin plugin;
@@ -32,8 +35,6 @@ public final class EnderChestPlugin extends JavaPlugin {
     public void onEnable() {
         long start = System.currentTimeMillis();
 
-        plugin = this;
-
         getLogger().info("");
         getLogger().info(getDescription().getName());
         getLogger().info("Version " + getDescription().getVersion());
@@ -41,7 +42,11 @@ public final class EnderChestPlugin extends JavaPlugin {
         getLogger().info(getDescription().getWebsite());
         getLogger().info("");
 
+        plugin = this;
+
         new Metrics(this, BSTATS_ID);
+
+        setupDataFolder();
 
         registerConfig();
         storageManager = new StorageManager();
@@ -50,6 +55,11 @@ public final class EnderChestPlugin extends JavaPlugin {
 
         getLogger().info("");
         getLogger().info("Successfully loaded in " + (System.currentTimeMillis() - start) + "ms!");
+    }
+
+    @Override
+    public void onDisable() {
+        storageManager.save();
     }
 
     private void registerConfig() {
@@ -65,10 +75,20 @@ public final class EnderChestPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new Listener() {
             @EventHandler
-            public void onPlayerJoin(PlayerJoinEvent event) {
-//                StorageManager.createPlayerFile(event.getPlayer());
+            public void onPlayerQuit(PlayerQuitEvent event) {
+                UUID uuid = event.getPlayer().getUniqueId();
+
+                storageManager.saveStorage(uuid);
+                storageManager.unloadStorage(uuid);
             }
         }, this);
+    }
+
+    private void setupDataFolder() {
+        File dataFolder = new File(getDataFolder(), "data");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
     }
 
     public static EnderChestPlugin getPlugin() {
