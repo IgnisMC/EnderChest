@@ -45,8 +45,7 @@ public class StorageGUI extends AbstractInventory {
         switch (item.getType()) {
             case PURPLE_STAINED_GLASS_PANE -> {
                 Player player = (Player) event.getWhoClicked();
-                player.closeInventory();
-                new EnderChestPageGUI().open(player);
+                new EnderChestPageGUI(player).open(player);
             }
             case BARRIER -> event.getWhoClicked().closeInventory();
         }

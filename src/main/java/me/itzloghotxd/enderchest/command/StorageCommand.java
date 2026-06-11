@@ -31,7 +31,6 @@ public class StorageCommand implements BaseCommandExecutor {
             return true;
         }
 
-        player.closeInventory();
         new StorageGUI().open(player);
 
         return true;

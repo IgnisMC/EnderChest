@@ -1,5 +1,7 @@
 package me.itzloghotxd.enderchest.gui;
 
+import me.itzloghotxd.enderchest.EnderChestPlugin;
+import me.itzloghotxd.enderchest.storage.PlayerStorage;
 import me.itzloghotxd.pdk.gui.inventory.AbstractInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -8,11 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class EnderChestPageGUI extends AbstractInventory {
+    private final Player player;
+
+    public EnderChestPageGUI(Player player) {
+        this.player = player;
+    }
     @Override
     public Component getTitle() {
         return Component.text("Ender Chest");
@@ -32,9 +40,7 @@ public class EnderChestPageGUI extends AbstractInventory {
 
         switch (item.getType()) {
             case ARROW -> {
-                Player player = (Player) event.getWhoClicked();
-                player.closeInventory();
-                new StorageGUI().open(player);
+                new StorageGUI().open((Player) event.getWhoClicked());
             }
             case BARRIER -> event.getWhoClicked().closeInventory();
         }
@@ -61,11 +67,25 @@ public class EnderChestPageGUI extends AbstractInventory {
         for (int i = 0; i < 9; i++) {
             if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) inventory.setItem(i, filler);
         }
+
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(player.getUniqueId());
+        ItemStack[] contents = storage.getItems();
+        for (int i = 0; i < contents.length; i++) {
+            inventory.setItem(i + 9, contents[i]);
+        }
     }
 
     @Override
     public void onOpen(InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0F, 1.0F);
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent event) {
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(player.getUniqueId());
+        for (int i = 0; i < 45; i++) {
+            storage.getItems()[i] = inventory.getItem(i + 9);
+        }
     }
 }
