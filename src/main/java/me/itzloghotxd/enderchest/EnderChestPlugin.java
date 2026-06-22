@@ -29,7 +29,7 @@ public final class EnderChestPlugin extends JavaPlugin {
     private static EnderChestPlugin plugin;
     private ConfigManager configManager;
     private StorageManager storageManager;
-    private static final int BSTATS_ID = 24501;
+    private static final int BSTATS_ID = 31831;
 
     @Override
     public void onEnable() {
