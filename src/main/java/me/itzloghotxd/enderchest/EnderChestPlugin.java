@@ -11,7 +11,8 @@
 package me.itzloghotxd.enderchest;
 
 import me.itzloghotxd.enderchest.command.StorageCommand;
-import me.itzloghotxd.enderchest.storage.StorageManager;
+import me.itzloghotxd.enderchest.storage.StorageProvider;
+import me.itzloghotxd.enderchest.storage.providers.YamlStorageProvider;
 import me.itzloghotxd.pdk.command.CommandHandler;
 import me.itzloghotxd.pdk.command.CommandManager;
 import me.itzloghotxd.pdk.config.ConfigManager;
@@ -28,7 +29,7 @@ import java.util.UUID;
 public final class EnderChestPlugin extends JavaPlugin {
     private static EnderChestPlugin plugin;
     private ConfigManager configManager;
-    private StorageManager storageManager;
+    private StorageProvider storageProvider;
     private static final int BSTATS_ID = 31831;
 
     @Override
@@ -49,7 +50,7 @@ public final class EnderChestPlugin extends JavaPlugin {
         setupDataFolder();
 
         registerConfig();
-        storageManager = new StorageManager();
+        storageProvider = new YamlStorageProvider();
         registerCommand();
         registerEvents();
 
@@ -59,7 +60,7 @@ public final class EnderChestPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        storageManager.save();
+        storageProvider.saveAll();
     }
 
     private void registerConfig() {
@@ -78,8 +79,8 @@ public final class EnderChestPlugin extends JavaPlugin {
             public void onPlayerQuit(PlayerQuitEvent event) {
                 UUID uuid = event.getPlayer().getUniqueId();
 
-                storageManager.saveStorage(uuid);
-                storageManager.unloadStorage(uuid);
+                storageProvider.savePlayerStorage(uuid);
+                storageProvider.unloadPlayerStorage(uuid);
             }
         }, this);
     }
@@ -99,7 +100,7 @@ public final class EnderChestPlugin extends JavaPlugin {
         return configManager;
     }
 
-    public StorageManager getStorageManager() {
-        return storageManager;
+    public StorageProvider getStorageProvider() {
+        return storageProvider;
     }
 }

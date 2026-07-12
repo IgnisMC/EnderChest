@@ -15,7 +15,7 @@
     <properties>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pdk.version>0.3.0</pdk.version>
+        <pdk.version>0.4.0</pdk.version>
     </properties>
 
     <url>https://modrinth.com/project/enderchestig</url>

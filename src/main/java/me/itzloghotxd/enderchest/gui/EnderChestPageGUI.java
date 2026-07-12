@@ -78,7 +78,7 @@ public class EnderChestPageGUI extends AbstractInventory {
             if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) inventory.setItem(i, filler);
         }
 
-        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(uuid);
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
         ItemStack[] contents = storage.getItems();
         for (int i = 0; i < contents.length; i++) {
             inventory.setItem(i + 9, contents[i]);
@@ -93,10 +93,10 @@ public class EnderChestPageGUI extends AbstractInventory {
 
     @Override
     public void onClose(InventoryCloseEvent event) {
-        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageManager().getStorage(uuid);
+        PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
         for (int i = 0; i < 45; i++) {
             storage.getItems()[i] = inventory.getItem(i + 9);
         }
-        EnderChestPlugin.getPlugin().getStorageManager().saveStorage(uuid);
+        EnderChestPlugin.getPlugin().getStorageProvider().savePlayerStorage(uuid);
     }
 }

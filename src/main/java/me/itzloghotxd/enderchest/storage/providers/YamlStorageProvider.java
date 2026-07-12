@@ -8,9 +8,11 @@
  * by the Free Software Foundation, version 3 of the License.
  */
 
-package me.itzloghotxd.enderchest.storage;
+package me.itzloghotxd.enderchest.storage.providers;
 
 import me.itzloghotxd.enderchest.EnderChestPlugin;
+import me.itzloghotxd.enderchest.storage.PlayerStorage;
+import me.itzloghotxd.enderchest.storage.StorageProvider;
 import me.itzloghotxd.pdk.config.ConfigHandler;
 import me.itzloghotxd.pdk.config.ConfigManager;
 import org.bukkit.inventory.ItemStack;
@@ -18,30 +20,16 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.*;
 
-public class StorageManager {
-    private final ConfigManager configManager;
+public class YamlStorageProvider implements StorageProvider {
     private final Map<UUID, PlayerStorage> storages = new HashMap<>();
+    private final ConfigManager configManager;
 
-    public StorageManager() {
+    public YamlStorageProvider() {
         configManager = EnderChestPlugin.getPlugin().getConfigManager();
     }
 
-    public PlayerStorage getStorage(UUID uuid) {
-        return storages.computeIfAbsent(uuid, this::loadStorage);
-    }
-
-    public void saveStorage(UUID uuid) {
-        String file = "data/" + uuid;
-        if (!configManager.has(file)) {
-            configManager.register(new ConfigHandler(EnderChestPlugin.getPlugin(), file));
-        }
-
-        PlayerStorage storage = getStorage(uuid);
-        configManager.getConfig(file).set("items", Arrays.asList(storage.getItems()));
-        configManager.save(file);
-    }
-
-    private PlayerStorage loadStorage(UUID uuid) {
+    @Override
+    public PlayerStorage loadPlayerStorage(UUID uuid) {
         String file = "data/" + uuid;
         PlayerStorage storage = new PlayerStorage(uuid);
 
@@ -63,19 +51,32 @@ public class StorageManager {
         return storage;
     }
 
-    public void save() {
+    @Override
+    public void savePlayerStorage(UUID uuid) {
+        String file = "data/" + uuid;
+        if (!configManager.has(file)) {
+            configManager.register(new ConfigHandler(EnderChestPlugin.getPlugin(), file));
+        }
+
+        PlayerStorage storage = getPlayerStorage(uuid);
+        configManager.getConfig(file).set("items", Arrays.asList(storage.getItems()));
+        configManager.save(file);
+    }
+
+    @Override
+    public void saveAll() {
         for (UUID uuid : storages.keySet()) {
-            saveStorage(uuid);
+            savePlayerStorage(uuid);
         }
     }
 
-    public void save(UUID... uuids) {
-        for (UUID uuid : uuids) {
-            saveStorage(uuid);
-        }
+    @Override
+    public PlayerStorage getPlayerStorage(UUID uuid) {
+        return storages.computeIfAbsent(uuid, this::loadPlayerStorage);
     }
 
-    public void unloadStorage(UUID uuid) {
+    @Override
+    public void unloadPlayerStorage(UUID uuid) {
         storages.remove(uuid);
     }
 }
