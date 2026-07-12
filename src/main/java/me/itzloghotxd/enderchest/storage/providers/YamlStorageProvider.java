@@ -42,10 +42,12 @@ public class YamlStorageProvider implements StorageProvider {
             configManager.reload(file);
         }
 
-        List<?> list = configManager.getConfig(file).getList("items");
-        if (list != null) {
-            for (int i = 0; i < Math.min(StoragePage.SIZE, list.size()); i++) {
-                storage.getPage(0).getContents()[i] = (ItemStack) list.get(i);
+        for (int i = 0; i < storage.getPageCount() ; i++) {
+            List<?> list = configManager.getConfig(file).getList("pages."+i);
+            if (list == null) continue;
+
+            for (int j = 0; j < Math.min(StoragePage.SIZE, list.size()); j++) {
+                storage.getPage(i).getContents()[j] = (ItemStack) list.get(j);
             }
         }
 
@@ -60,7 +62,10 @@ public class YamlStorageProvider implements StorageProvider {
         }
 
         PlayerStorage storage = getPlayerStorage(uuid);
-        configManager.getConfig(file).set("items", Arrays.asList(storage.getPage(0).getContents()));
+        for (int i = 0; i < storage.getPageCount() ; i++) {
+            configManager.getConfig(file).set("pages."+i, Arrays.asList(storage.getPage(i).getContents()));
+        }
+
         configManager.save(file);
     }
 
