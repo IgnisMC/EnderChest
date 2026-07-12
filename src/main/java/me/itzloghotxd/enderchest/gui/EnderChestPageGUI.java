@@ -12,6 +12,7 @@ package me.itzloghotxd.enderchest.gui;
 
 import me.itzloghotxd.enderchest.EnderChestPlugin;
 import me.itzloghotxd.enderchest.storage.PlayerStorage;
+import me.itzloghotxd.enderchest.storage.StoragePage;
 import me.itzloghotxd.pdk.gui.inventory.AbstractInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -79,7 +80,7 @@ public class EnderChestPageGUI extends AbstractInventory {
         }
 
         PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
-        ItemStack[] contents = storage.getItems();
+        ItemStack[] contents = storage.getPage(0).getContents();
         for (int i = 0; i < contents.length; i++) {
             inventory.setItem(i + 9, contents[i]);
         }
@@ -94,8 +95,8 @@ public class EnderChestPageGUI extends AbstractInventory {
     @Override
     public void onClose(InventoryCloseEvent event) {
         PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
-        for (int i = 0; i < 45; i++) {
-            storage.getItems()[i] = inventory.getItem(i + 9);
+        for (int i = 0; i < StoragePage.SIZE; i++) {
+            storage.getPage(0).getContents()[i] = inventory.getItem(i + 9);
         }
         EnderChestPlugin.getPlugin().getStorageProvider().savePlayerStorage(uuid);
     }

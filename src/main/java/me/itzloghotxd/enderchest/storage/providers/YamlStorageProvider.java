@@ -12,6 +12,7 @@ package me.itzloghotxd.enderchest.storage.providers;
 
 import me.itzloghotxd.enderchest.EnderChestPlugin;
 import me.itzloghotxd.enderchest.storage.PlayerStorage;
+import me.itzloghotxd.enderchest.storage.StoragePage;
 import me.itzloghotxd.enderchest.storage.StorageProvider;
 import me.itzloghotxd.pdk.config.ConfigHandler;
 import me.itzloghotxd.pdk.config.ConfigManager;
@@ -43,8 +44,8 @@ public class YamlStorageProvider implements StorageProvider {
 
         List<?> list = configManager.getConfig(file).getList("items");
         if (list != null) {
-            for (int i = 0; i < Math.min(45, list.size()); i++) {
-                storage.getItems()[i] = (ItemStack) list.get(i);
+            for (int i = 0; i < Math.min(StoragePage.SIZE, list.size()); i++) {
+                storage.getPage(0).getContents()[i] = (ItemStack) list.get(i);
             }
         }
 
@@ -59,7 +60,7 @@ public class YamlStorageProvider implements StorageProvider {
         }
 
         PlayerStorage storage = getPlayerStorage(uuid);
-        configManager.getConfig(file).set("items", Arrays.asList(storage.getItems()));
+        configManager.getConfig(file).set("items", Arrays.asList(storage.getPage(0).getContents()));
         configManager.save(file);
     }
 

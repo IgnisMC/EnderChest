@@ -10,24 +10,31 @@
 
 package me.itzloghotxd.enderchest.storage;
 
-import org.bukkit.inventory.ItemStack;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerStorage {
     private final UUID playerId;
-    private final ItemStack[] items;
+    private final List<StoragePage> pages = new ArrayList<>();
 
     public PlayerStorage(UUID playerId) {
         this.playerId = playerId;
-        items = new ItemStack[45];
-    }
 
-    public ItemStack[] getItems() {
-        return items;
+        for (int i = 0; i < 9; i++) {
+            pages.add(i, new StoragePage());
+        }
     }
 
     public UUID getPlayerId() {
         return playerId;
+    }
+
+    public StoragePage getPage(int page) {
+        return pages.get(page);
+    }
+
+    public int getPageCount() {
+        return pages.size();
     }
 }
