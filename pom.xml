@@ -15,7 +15,7 @@
     <properties>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pdk.version>0.4.0</pdk.version>
+        <pdk.version>0.4.0</pdk.version> <!-- 0ae13dcc8ca808f11f07c5bd4c9cb59429f04df6 -->
     </properties>
 
     <url>https://modrinth.com/project/enderchestig</url>
@@ -103,19 +103,19 @@
         <dependency>
             <groupId>me.itzloghotxd.pdk</groupId>
             <artifactId>command</artifactId>
-            <version>0.3.0</version>
+            <version>${pdk.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.itzloghotxd.pdk</groupId>
             <artifactId>config</artifactId>
-            <version>0.3.0</version>
+            <version>${pdk.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.itzloghotxd.pdk</groupId>
             <artifactId>gui</artifactId>
-            <version>0.3.0</version>
+            <version>${pdk.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

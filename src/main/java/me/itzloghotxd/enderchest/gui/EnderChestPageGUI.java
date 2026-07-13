@@ -30,13 +30,17 @@ import java.util.UUID;
 
 public class EnderChestPageGUI extends AbstractInventory {
     private final UUID uuid;
+    private final int pageIndex;
 
-    public EnderChestPageGUI(Player player) {
+    public EnderChestPageGUI(Player player, int page) {
+        super(player);
         this.uuid = player.getUniqueId();
+        pageIndex = page;
     }
+
     @Override
     public Component getTitle() {
-        return Component.text("Ender Chest");
+        return Component.text("Ender Chest (Page " + (pageIndex+1) + ")");
     }
 
     @Override
@@ -52,8 +56,8 @@ public class EnderChestPageGUI extends AbstractInventory {
         if (item == null) return;
 
         switch (item.getType()) {
-            case ARROW -> new StorageGUI().open((Player) event.getWhoClicked());
-            case BARRIER -> event.getWhoClicked().closeInventory();
+            case ARROW -> new StorageGUI(player).open();
+            case BARRIER -> player.closeInventory();
         }
     }
 
@@ -76,11 +80,12 @@ public class EnderChestPageGUI extends AbstractInventory {
         fillerMeta.displayName(Component.empty());
         filler.setItemMeta(fillerMeta);
         for (int i = 0; i < 9; i++) {
-            if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) inventory.setItem(i, filler);
+            ItemStack item = inventory.getItem(i);
+            if (item == null || item.getType() == Material.AIR) inventory.setItem(i, filler);
         }
 
         PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
-        ItemStack[] contents = storage.getPage(0).getContents();
+        ItemStack[] contents = storage.getPage(pageIndex).getContents();
         for (int i = 0; i < contents.length; i++) {
             inventory.setItem(i + 9, contents[i]);
         }
@@ -88,7 +93,6 @@ public class EnderChestPageGUI extends AbstractInventory {
 
     @Override
     public void onOpen(InventoryOpenEvent event) {
-        Player player = (Player) event.getPlayer();
         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0F, 1.0F);
     }
 
@@ -96,7 +100,7 @@ public class EnderChestPageGUI extends AbstractInventory {
     public void onClose(InventoryCloseEvent event) {
         PlayerStorage storage = EnderChestPlugin.getPlugin().getStorageProvider().getPlayerStorage(uuid);
         for (int i = 0; i < StoragePage.SIZE; i++) {
-            storage.getPage(0).getContents()[i] = inventory.getItem(i + 9);
+            storage.getPage(pageIndex).getContents()[i] = inventory.getItem(i + 9);
         }
         EnderChestPlugin.getPlugin().getStorageProvider().savePlayerStorage(uuid);
     }

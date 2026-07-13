@@ -25,6 +25,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class StorageGUI extends AbstractInventory {
+
+    public StorageGUI(Player player) {
+        super(player);
+    }
+
     @Override
     public Component getTitle() {
         return Component.text("Storage");
@@ -39,13 +44,18 @@ public class StorageGUI extends AbstractInventory {
     public void handleClick(InventoryClickEvent event) {
         event.setCancelled(true);
 
+        if (event.getClickedInventory() != event.getView().getTopInventory()) return;
+
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
 
         switch (item.getType()) {
             case PURPLE_STAINED_GLASS_PANE -> {
-                Player player = (Player) event.getWhoClicked();
-                new EnderChestPageGUI(player).open(player);
+                int page = event.getSlot() - 9;
+                if (0 <= page && page <= 8) {
+//                    if (!player.hasPermission("enderchest.page."+(page+1))) return;
+                    new EnderChestPageGUI(player, page).open();
+                }
             }
             case BARRIER -> event.getWhoClicked().closeInventory();
         }
