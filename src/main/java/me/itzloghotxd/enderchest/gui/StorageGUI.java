@@ -53,7 +53,7 @@ public class StorageGUI extends AbstractInventory {
             case PURPLE_STAINED_GLASS_PANE -> {
                 int page = event.getSlot() - 9;
                 if (0 <= page && page <= 8) {
-//                    if (!player.hasPermission("enderchest.page."+(page+1))) return;
+                    if (!player.hasPermission("enderchest.page."+(page+1))) return;
                     new EnderChestPageGUI(player, page).open();
                 }
             }
@@ -82,7 +82,20 @@ public class StorageGUI extends AbstractInventory {
             ));
             pageMeta.displayName(Component.text("Ender Chest Page " + (i+1)).color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
             page.setItemMeta(pageMeta);
-            inventory.setItem(i+9, page);
+            if (!player.hasPermission("enderchest.page."+(i+1))) {
+                ItemStack lock = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+                ItemMeta lockMeta = lock.getItemMeta();
+                lockMeta.lore(List.of(
+                        Component.text("You don't have permission to access this page.").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                        Component.text("Permission required:").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                        Component.text("enderchest.page." + (i+1)).color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+                );
+                lockMeta.displayName(Component.text("Locked Page").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+                lock.setItemMeta(lockMeta);
+                inventory.setItem(i + 9, lock);
+                continue;
+            }
+            inventory.setItem(i + 9, page);
         }
 
         ItemStack close = new ItemStack(Material.BARRIER);

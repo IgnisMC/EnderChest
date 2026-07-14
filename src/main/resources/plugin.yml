@@ -18,3 +18,53 @@ permissions:
   storage.use:
     description: Allows players to use the storage command
     default: true
+
+  enderchest.page.*:
+    description: Gives access to all the pages
+    default: op
+    children:
+      enderchest.page.1: true
+      enderchest.page.2: true
+      enderchest.page.3: true
+      enderchest.page.4: true
+      enderchest.page.5: true
+      enderchest.page.6: true
+      enderchest.page.7: true
+      enderchest.page.8: true
+      enderchest.page.9: true
+
+  enderchest.page.1:
+    description: Gives access to the storage page 1
+    default: true
+
+  enderchest.page.2:
+    description: Gives access to the storage page 2
+    default: op
+
+  enderchest.page.3:
+    description: Gives access to the storage page 3
+    default: op
+
+  enderchest.page.4:
+    description: Gives access to the storage page 4
+    default: op
+
+  enderchest.page.5:
+    description: Gives access to the storage page 5
+    default: op
+
+  enderchest.page.6:
+    description: Gives access to the storage page 6
+    default: op
+
+  enderchest.page.7:
+    description: Gives access to the storage page 7
+    default: op
+
+  enderchest.page.8:
+    description: Gives access to the storage page 8
+    default: op
+
+  enderchest.page.9:
+    description: Allows players to access storage page 9
+    default: op
